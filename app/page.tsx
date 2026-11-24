@@ -47,6 +47,9 @@ export default function Home() {
         <Link href={'/about'} className="hover:underline cursor-pointer">
           Go about
         </Link>
+        <Link href={'/profile'} className="hover:underline cursor-pointer">
+          Go profile
+        </Link>
       </div>
 
 
