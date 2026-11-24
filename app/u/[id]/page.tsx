@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProfile } from "@/lib/profile-store";
+import { renderBio } from "@/lib/render-bio";
 
 export default function PublicProfilePage({ params }: { params: { id: string } }) {
   const profile = getProfile(params.id);
@@ -15,7 +16,7 @@ export default function PublicProfilePage({ params }: { params: { id: string } }
     <h1 className="font-bold text-xl">{profile.displayName}</h1>
     <div
       className="max-w-md text-center"
-      dangerouslySetInnerHTML={{ __html: profile.bio }}
+      dangerouslySetInnerHTML={{ __html: renderBio(profile.bio) }}
     />
     <div className="text-sm opacity-50">
       Cập nhật lúc {new Date(profile.updatedAt).toLocaleString("vi-VN")}

@@ -13,10 +13,16 @@ export default function EditProfilePage() {
   useEffect(() => {
     if (!isSignedIn) return
     fetch("/api/profile")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
       .then((data) => {
         setDisplayName(data.profile?.displayName ?? user?.fullName ?? "")
         setBio(data.profile?.bio ?? "")
+      })
+      .catch(() => {
+        setMessage("Không tải được hồ sơ, vui lòng thử lại.")
       })
   }, [isSignedIn, user?.fullName])
 
@@ -26,7 +32,7 @@ export default function EditProfilePage() {
     const res = await fetch("/api/profile", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user?.id, displayName, bio }),
+      body: JSON.stringify({ displayName, bio }),
     })
     const data = await res.json()
     setMessage(res.ok ? "Đã lưu!" : data.error)
