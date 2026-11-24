@@ -13,7 +13,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  return NextResponse.json({ notes: listNotes() });
+  return NextResponse.json({ notes: listNotes(userId) });
 }
 
 // Tạo ghi chú mới
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   const body = (await request.json()) as { text?: string };
   const text = body.text ?? "";
 
-  if (!text.trim || text.length > MAX_LENGTH) {
+  if (!text.trim() || text.length > MAX_LENGTH) {
     return NextResponse.json(
       { error: `Ghi chú phải có từ 1 đến ${MAX_LENGTH} ký tự` },
       { status: 400 },
@@ -45,10 +45,10 @@ export async function DELETE(request: Request) {
   }
 
   const id = new URL(request.url).searchParams.get("id");
-  if (!id || !findNote(id)) {
+  if (!id || !findNote(userId, id)) {
     return NextResponse.json({ error: "Không tìm thấy ghi chú" }, { status: 404 });
   }
 
-  deleteNote(id);
+  deleteNote(userId, id);
   return new NextResponse(null, { status: 204 });
 }

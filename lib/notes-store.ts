@@ -10,8 +10,10 @@ export type Note = {
 
 const notes: Note[] = [];
 
-export function listNotes(): Note[] {
-  return [...notes].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+export function listNotes(userId: string): Note[] {
+  return notes
+    .filter((n) => n.userId === userId)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
 export function addNote(userId: string, text: string): Note {
@@ -25,12 +27,12 @@ export function addNote(userId: string, text: string): Note {
   return note;
 }
 
-export function findNote(id: string): Note | undefined {
-  return notes.find((n) => n.id === id);
+export function findNote(userId: string, id: string): Note | undefined {
+  return notes.find((n) => n.id === id && n.userId === userId);
 }
 
-export function deleteNote(id: string): boolean {
-  const index = notes.findIndex((n) => n.id === id);
+export function deleteNote(userId: string, id: string): boolean {
+  const index = notes.findIndex((n) => n.id === id && n.userId === userId);
   if (index === -1) return false;
   notes.splice(index, 1);
   return true;
