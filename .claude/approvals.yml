@@ -1,0 +1,16 @@
+# .claude/approvals.yml
+# Claude Approvals policy. Observe mode: the check reports what it would do
+# but is not enforced. Delete the `mode: observe` line to enforce it.
+#
+# No rule reads claude/code_review, so this policy never starts a hosted
+# Code Review. Code is reviewed locally with /ship before it is pushed.
+version: 1
+mode: observe
+rules:
+  - purpose: "A change takes one approval, and Claude approves."
+    paths: ["**"]
+    verdict: { claude: approves, seats: 1 }
+  - purpose: "A change to the review rules takes two people."
+    paths: ["**/.claude/**"]
+    nested: inherit
+    verdict: { claude: comments, seats: 2 }
